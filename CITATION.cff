@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "CutClean"
+authors:
+  - family-names: Magliolo
+    given-names: Leonardo
+  - family-names: Pastore
+    given-names: Vito Paolo
+  - family-names: Valenzise
+    given-names: Giuseppe
+  - family-names: Tartaglione
+    given-names: Enzo
+repository-code: "https://github.com/MaglioloLeonardo/CutClean"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "CutClean: Neural Network Pruning for Privacy-Preserving Inference"
+  authors:
+    - family-names: Magliolo
+      given-names: Leonardo
+    - family-names: Pastore
+      given-names: Vito Paolo
+    - family-names: Valenzise
+      given-names: Giuseppe
+    - family-names: Tartaglione
+      given-names: Enzo
+  collection-title: "Pattern Recognition. ICPR 2026. Lecture Notes in Computer Science"
+  publisher:
+    name: "Springer Nature Switzerland"
+  year: 2026
+  start: 450
+  end: 465
+  doi: "10.1007/978-3-032-31452-9_30"

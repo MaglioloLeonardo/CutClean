@@ -1,0 +1,9 @@
+torch>=2.5
+torchvision
+transformers
+numpy
+pandas
+Pillow
+tqdm
+wandb
+gdown

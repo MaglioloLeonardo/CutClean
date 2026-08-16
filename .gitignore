@@ -146,9 +146,8 @@ wandb/*
 scripts/*
 *.sh
 
-# Keep the experiment launchers, which the rules above would otherwise exclude.
-!experiments/*.sh
-!experiments/*.slurm
+# Internal experiment launchers (cluster-specific paths) stay out of the public tree.
+experiments/
 
 # Run logs produced by experiments/run_resnet18_paper.sh with USE_SLURM=1.
 logs/

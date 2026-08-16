@@ -133,10 +133,22 @@ still be overridden per run with `--datapath`, `--corruptedcifarunbiased_root` a
 `--waterbirds_root`.
 
 CelebA is **not** redistributed: its licence restricts research use and forbids
-redistribution of the images. `datasets/celebA.py` downloads the official release on first
-use and reconstructs the balanced subset with a seeded per-group subsampling. The split
-manifests published alongside the archives list the exact subsets (`seed`, `split`,
-`image_id`, `target`, `bias`) so the selection can be audited independently.
+redistribution of the images. Obtain it from the official page
+(https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) or any complete mirror, and place the
+aligned images and annotations under `<CUTCLEAN_DATA>/celeba/`:
+
+```
+celeba/
+  img_align_celeba/          202,599 aligned face images
+  list_attr_celeba.txt       attribute annotations (.csv is also accepted)
+  list_eval_partition.txt    official train/val/test partition (.csv is also accepted)
+```
+
+`datasets/celebA.py` reconstructs the balanced subset with a seeded per-group subsampling.
+The split manifests published alongside the archives list the exact subsets (`seed`,
+`split`, `image_id`, `target`, `bias`) so the selection can be audited independently. An
+automatic download path exists in the loader, but it relies on a third-party mirror that is
+currently unavailable, so the manual setup above is the supported route.
 
 The resulting subset sizes reproduce those reported in the supplementary material: 5,548 /
 728 / 720 for CelebA blond hair, 812 / 36 / 88 for heavy make-up, 8,900 / 2,500 / 1,300 for

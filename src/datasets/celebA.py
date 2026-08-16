@@ -149,7 +149,18 @@ class CelebA(torch.utils.data.Dataset):
         output = os.path.join(path, "celeba.tar.gz")
         os.makedirs(path, exist_ok=True)
         print(f"=> Downloading CelebA dataset from {url}")
-        gdown.download(url, output, quiet=False)
+        try:
+            gdown.download(url, output, quiet=False)
+            if not os.path.exists(output):
+                raise RuntimeError("gdown finished without producing the archive")
+        except Exception as exc:
+            raise RuntimeError(
+                "Automatic CelebA download failed: the mirror behind the link above "
+                "is unavailable. Download CelebA from the official page "
+                "(https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) and place "
+                "'img_align_celeba/', 'list_attr_celeba.txt' (or .csv) and "
+                f"'list_eval_partition.txt' (or .csv) under {path} (see the README)."
+            ) from exc
         print("=> Extracting dataset...")
         temp_extract_dir = os.path.join(path, "_temp_extract")
         os.makedirs(temp_extract_dir, exist_ok=True)

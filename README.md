@@ -82,12 +82,6 @@ src/
   datasets/, CorruptedCifarUnbiased.py, waterbirds_dataloader.py
   irene/                       privacy heads, mutual-information proxy, forward hooks
   model_architectures/         ResNet without skip connections, transformer MLP pruning
-experiments/
-  run_celeba_resnet18.py       CelebA, both target attributes
-  run_corrupted_cifar10_resnet18.py
-  run_waterbirds_resnet18.py
-  _paper_common.py             shared configuration and job submission
-  cutclean_resnet18.slurm      SLURM job template
 ```
 
 The driver is executed from the repository root as `python src/run_cutclean.py`, which places
@@ -156,28 +150,19 @@ Corrupted-CIFAR10 and 2,328 / 664 / 332 for Waterbirds.
 
 ## Reproducing the ResNet18 experiments
 
-The three launchers under `experiments/` carry the configuration of the paper and take no
-arguments:
+Each experiment is a direct invocation of `src/run_cutclean.py` (see the next section for a
+complete command line). The configuration follows Section 4.1 of the paper: SGD with
+momentum 0.9, weight decay 1e-4, batch size 124, initial learning rate 1e-2, 400 MI
+pre-training epochs (`--e_pre 400`), 10 fine-tuning epochs after pruning (`--e_ft 10`),
+ImageNet-1k initialisation, images at 224x224, and one pruning block per residual stage.
+The `γ` grid is `{0, 0.01, 0.1, 1, 5, 10, 50, 100, 500, 1000}` and the sparsity grid spans
+`[0, 0.95]` in steps of 0.05. `P_threshold` (`--t_ph`) is 0.65 for the two-class datasets
+and 0.20 for Corrupted-CIFAR10.
 
-```bash
-python experiments/run_celeba_resnet18.py
-python experiments/run_corrupted_cifar10_resnet18.py
-python experiments/run_waterbirds_resnet18.py
-```
-
-Each of them runs, per seed, an unpruned reference with `γ = 0` and a complete run covering
-the `γ` grid and the sparsity grid. Runs are submitted as individual SLURM jobs when
-`USE_SLURM` is set, and executed sequentially otherwise; a run whose `manifest.json` already
-exists is skipped, so a campaign can be resumed after an interruption. Data paths, seeds,
-epoch budgets and the SLURM partition are defined at the top of
-`experiments/_paper_common.py`.
-
-The configuration follows Section 4.1 of the paper: SGD with momentum 0.9, weight decay
-1e-4, batch size 124, initial learning rate 1e-2, 400 MI pre-training epochs, 10 fine-tuning
-epochs after pruning, ImageNet-1k initialisation, images at 224x224, and one pruning block
-per residual stage. The `γ` grid is `{0, 0.01, 0.1, 1, 5, 10, 50, 100, 500, 1000}` and the
-sparsity grid spans `[0, 0.95]` in steps of 0.05. `P_threshold` is 65% for the two-class
-datasets and 20% for Corrupted-CIFAR10.
+No seed is preset anywhere: `--seed` is a required argument, and the CelebA loader refuses
+to subsample without one, since the seed also drives the balanced subset selection. The
+paper averages every result over three runs; choose the seeds explicitly and report them.
+The baseline rows of the tables correspond to `--gamma_list 0 --sparsity_list 0`.
 
 ## Running a single configuration
 

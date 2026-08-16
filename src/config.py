@@ -17,7 +17,7 @@ BASE_DEFAULT_ARGS = {
     "datapath": default_root() + os.sep,
     "corruptedcifarunbiased_root": os.path.join(default_root(), "corrupted_cifar_unbiased"),
     "waterbirds_root": os.path.join(default_root(), "waterbirds_unbiased"),
-    "seed": 1,
+    "seed": None,   # no default: a seed must always be chosen explicitly
     "device": "cuda:0",
     "projectName": None,
     "wandb_log": True,
@@ -158,7 +158,8 @@ def parse_args(from_function=False, kwargs=None):
             default=default_args["waterbirds_root"],
             help="Base path for the unbiased Waterbirds dataset (train/val/test)",
         )
-        parser.add_argument("--seed",                 type=int,   default=default_args["seed"])
+        parser.add_argument("--seed",                 type=int,   required=(default_args["seed"] is None),
+                            default=default_args["seed"], help="Random seed; no default, choose and report it explicitly")
         parser.add_argument("--device",               type=str,   default=default_args["device"],             help="Device to use")
         parser.add_argument("--projectName",          type=str, required=True, help="Weights & Biases project name")
         parser.add_argument("--wandb_log",            action='store_true', default=default_args["wandb_log"], help="Log to wandb")
@@ -278,6 +279,9 @@ def parse_args(from_function=False, kwargs=None):
 
     # Ensure all parameters have the same length as used_phs
     handle_all(args)
+
+    if args.seed is None:
+        raise ValueError("A seed must be provided explicitly (--seed on the CLI, or the seed entry in kwargs).")
 
     initialize_seeds(args)
     args.run_dir = create_save_dir(args, False)

@@ -98,7 +98,12 @@ def _resolve(df, name):
     raise KeyError(name)
 
 class CelebA(torch.utils.data.Dataset):
-    def __init__(self, root, split="train", target="Blond_Hair", bias_attr="Male", unbiased=True, seed=42, train_proc=False):
+    def __init__(self, root, split="train", target="Blond_Hair", bias_attr="Male", unbiased=True, seed=None, train_proc=False):
+        if seed is None:
+            raise ValueError(
+                "CelebA requires an explicit seed: it drives the balanced per-group "
+                "subsampling, and an unseeded run would be silently irreproducible."
+            )
         path = root
         if not os.path.isdir(path):
             self.download_dataset(path)

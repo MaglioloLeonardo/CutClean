@@ -1,5 +1,7 @@
 # CutClean: Neural Network Pruning for Privacy-Preserving Inference
 
+[Arxiv preprint](http://arxiv.org/abs/2608.13773)
+
 Reference implementation of the method described in:
 
 > Leonardo Magliolo, Vito Paolo Pastore, Giuseppe Valenzise, Enzo Tartaglione.
@@ -8,7 +10,7 @@ Reference implementation of the method described in:
 > Recognition (ICPR 2026), Lyon, France, August 17–22, 2026.
 > Lecture Notes in Computer Science, Springer Nature Switzerland, pp. 450–465.
 > [doi:10.1007/978-3-032-31452-9_30](https://doi.org/10.1007/978-3-032-31452-9_30)
-[Arxiv preprint](http://arxiv.org/abs/2608.13773)
+
 
 Leonardo Magliolo and Enzo Tartaglione are with LTCI, Télécom Paris, Institut
 Polytechnique de Paris, France; Vito Paolo Pastore is with MaLGa-DIBRIS, University of

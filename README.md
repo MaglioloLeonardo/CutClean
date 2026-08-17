@@ -148,21 +148,7 @@ The resulting subset sizes reproduce those reported in the supplementary materia
 728 / 720 for CelebA blond hair, 812 / 36 / 88 for heavy make-up, 8,900 / 2,500 / 1,300 for
 Corrupted-CIFAR10 and 2,328 / 664 / 332 for Waterbirds.
 
-## Reproducing the ResNet18 experiments
 
-Each experiment is a direct invocation of `src/run_cutclean.py` (see the next section for a
-complete command line). The configuration follows Section 4.1 of the paper: SGD with
-momentum 0.9, weight decay 1e-4, batch size 124, initial learning rate 1e-2, 400 MI
-pre-training epochs (`--e_pre 400`), 10 fine-tuning epochs after pruning (`--e_ft 10`),
-ImageNet-1k initialisation, images at 224x224, and one pruning block per residual stage.
-The `γ` grid is `{0, 0.01, 0.1, 1, 5, 10, 50, 100, 500, 1000}` and the sparsity grid spans
-`[0, 0.95]` in steps of 0.05. `P_threshold` (`--t_ph`) is 0.65 for the two-class datasets
-and 0.20 for Corrupted-CIFAR10.
-
-No seed is preset anywhere: `--seed` is a required argument, and the CelebA loader refuses
-to subsample without one, since the seed also drives the balanced subset selection. The
-paper averages every result over three runs; choose the seeds explicitly and report them.
-The baseline rows of the tables correspond to `--gamma_list 0 --sparsity_list 0`.
 
 ## Running a single configuration
 
@@ -198,24 +184,6 @@ Each run writes a timestamped directory under `models/<projectName>/`:
 | `stats/results_sparsity_sweep.csv` | per sparsity level: measured weight and channel sparsity, target and privacy-head accuracy on train, validation and test |
 | `stats/run_summary.txt` | configuration and stage-by-stage log |
 
-Pruning masks are folded into the weights before saving, so the checkpoints load into a
-standard torchvision model without any pruning reparametrisation.
-
-## Implementation notes
-
-- Pruning is applied as a mask on the output channels, which zeroes the corresponding
-  weights but does not physically shrink the tensors. The reported sparsity is therefore a
-  structured sparsity pattern rather than a reduction of the stored model size.
-- Mutual information is computed in single precision even inside autocast regions. The
-  numerical guards in the estimator are below the range of half precision, and evaluating it
-  in half precision makes underflowing entries collapse to zero, which turns the result into
-  NaN.
-- The learning-rate schedule is an exponential decay to one hundredth of the initial value,
-  whereas the paper describes a cosine decay.
-- The Waterbirds loader keeps the original image resolution instead of resizing to 224x224.
-- Between pruning and evaluation all privacy heads are retrained, and the one attached to
-  the last block is reported. The paper retrains only the last head, so the attacker used
-  here is at least as strong.
 
 ## Citation
 
